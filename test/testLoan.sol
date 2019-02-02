@@ -6,11 +6,10 @@ import "../contracts/Loan.sol";
 
 contract TestLoan {
  // The address of the adoption contract to be tested
- Loan loan = Loan(DeployedAddresses.Loan());
+//  Loan loan = Loan(DeployedAddresses.Loan());
 
 
- //The expected owner of adopted pet is this contract
- string expected = loan.hi();
- Assert.equal(expected, "Hello World", "should work");
+//  string expected = loan.hi();
+//  Assert.equal(expected, "Hello World", "should work");
 
 }
