@@ -18,11 +18,11 @@
  *
  */
 
-// const HDWalletProvider = require('truffle-hdwallet-provider');
-// const infuraKey = "fj4jll3k.....";
-//
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
+const HDWalletProvider = require('truffle-hdwallet-provider');
+const infuraKey = "4fe58e2b24e841e89ef4762250af5f57";
+
+const fs = require('fs');
+const MNEMONIC = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
   /**
@@ -49,6 +49,13 @@ module.exports = {
     //  from: "0x47a793D7D0AA5727095c3Fe132a6c1A46804c8D2",
      gas: 4600000
     },
+    ropsten: {
+      provider: function() {
+        return new HDWalletProvider(MNEMONIC, `https://ropsten.infura.io/${infuraKey}`)
+      },
+      network_id: 3,
+      gas: 4000000      //make sure this gas allocation isn't over 4M, which is the max
+    }
 
     // Another network with more advanced options...
     // advanced: {
