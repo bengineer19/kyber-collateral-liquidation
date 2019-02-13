@@ -1,6 +1,6 @@
-pragma solidity ^0.5.0;
-
-
+// pragma solidity ^0.5.0;
+pragma solidity 0.4.18;
+/*
 // Modifier which prices contract
 contract priced {
     modifier costs(uint price) {
@@ -26,9 +26,7 @@ contract Loan is priced {
     event CollateralProvided();
     event Default();
 
-    // Loan(initialCollateral)
     constructor(uint initialCollateral) public {
-    // constructor() public {
         // The loan is initiated by the borrower
         borrower = msg.sender;
 
@@ -60,3 +58,4 @@ contract Loan is priced {
         return ("I'm alive");
     }
 }
+*/
