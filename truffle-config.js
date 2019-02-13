@@ -46,7 +46,7 @@ module.exports = {
      host: "127.0.0.1",     // Localhost (default: none)
      port: 8545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
-    //  from: "0x47a793D7D0AA5727095c3Fe132a6c1A46804c8D2",
+     from: "0x22477e87970be290d264bbe12eb8637e8d156aaf",
      gas: 4600000
     },
     ropsten: {
@@ -94,7 +94,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      // version: "0.4.21",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.4.18",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
