@@ -1,6 +1,8 @@
 # kyber-collateral-liquidation
 Using the Kyber network for on-chain collateral liquidation in loans
 
+Note: this a proof-of-concept demo.
+
 ## Running Ganache
 To make the Kyber smart contracts available locally, we use the setup described [here](https://github.com/KyberNetwork/workshop).
 
