@@ -20,12 +20,13 @@ contract Loan is priced {
     uint public collateral;
     bool public loanDefaulted;
     bool public collateralProvided = false;
+    bool public lenderRegistered = false;
 
     KyberNetworkProxy public proxy;
     ERC20 constant internal ETH_TOKEN_ADDRESS = ERC20(0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee);
 
     event LoanStart(address borrower, uint collateral);
-    event LoanFulfilled();
+    event LoanFulfilled(uint balance);
     event CollateralProvided();
     event Default();
 
@@ -48,37 +49,57 @@ contract Loan is priced {
         CollateralProvided();
     }
 
+    // @dev Allow the contract creator (Borrower) to withdraw collateral 
+    // if no interest has been received in loan offer.
+    // NOTE: this is different to `returnCollateral` and `siezeCollateral`, 
+    // which are intended to be called by the Lender.
+    function withdrawCollateral() public {
+        require(msg.sender == borrower);
+        // Do not allow withdrawl of collateral after loan has "started"
+        require(lenderRegistered == false);
+
+        borrower.transfer(this.balance);
+    }
+
     //@dev Accept the loan as a lender 
     //     (note: requires that collateral has already been put up)
     function registerAsLender() public {
         // Require that collateral has already been put up
         require(collateralProvided);
+        lenderRegistered = true;
         lender = msg.sender;
     }
 
     //@dev Let the lender sieze the collateral in the event of a loan default
-    function siezeCollateral() public {
+    //@param token The address of the token to liquify the collateral in
+    function siezeCollateral(ERC20 token) public {
         require(msg.sender == lender);
 
-        msg.sender.transfer(collateral);
+        uint minLiqConversionRate;
+        // Get minimum conversion rate
+        (minLiqConversionRate,) = proxy.getExpectedRate(ETH_TOKEN_ADDRESS, token, this.balance);
+
+        // Swap ETH to ERC20 token
+        uint destLiqAmount = proxy.swapEtherToToken.value(this.balance)(token, minLiqConversionRate);
+        // Send the swapped tokens to the destination address
+        require(token.transfer(lender, destLiqAmount));
+        
+        // Log event
         Default();
     }
 
     //@dev Allow the lender to mark the loan as fulfilled and return the 
     //     collateral to the borrower
-    function withdrawCollateral() public {
+    function returnCollateral() public {
         require(msg.sender == lender);
 
-        borrower.transfer(collateral);
-        LoanFulfilled();
-        // msg.sender.transfer(collateral);
+        borrower.transfer(this.balance);
+        // Log event
+        LoanFulfilled(this.balance);
     }
 
     function meaningOfLife() public pure returns (uint) {
         return 42;
     }
-
-    // TODO: allow borrower to withdraw collateral
-    // function cancelLoan(){}
 
 }
