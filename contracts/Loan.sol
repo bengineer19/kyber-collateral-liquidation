@@ -11,7 +11,6 @@ contract priced {
     }
 }
 
-
 contract Loan is priced {
     
     address public lender;
@@ -30,9 +29,9 @@ contract Loan is priced {
     event CollateralProvided();
     event Default();
 
-    //@dev Contract contstructor
-    //@param _proxy KyberNetworkProxy contract address
-    //@param _collateral The amount of collateral being put up for the loan
+    /// @dev Contract contstructor
+    /// @param _proxy KyberNetworkProxy contract address
+    /// @param _collateral The amount of collateral being put up for the loan
     function Loan(KyberNetworkProxy _proxy, uint _collateral) public {
         // The loan is initiated by the borrower
         borrower = msg.sender;
@@ -43,16 +42,17 @@ contract Loan is priced {
         LoanStart(borrower, collateral);
     }
 
-    //@dev Allow the contact to receive collateral
+    /// @dev Allow the contact to receive collateral
     function payCollateral() public payable costs(collateral){
         collateralProvided = true;
         CollateralProvided();
     }
 
-    // @dev Allow the contract creator (Borrower) to withdraw collateral 
-    // if no interest has been received in loan offer.
-    // NOTE: this is different to `returnCollateral` and `siezeCollateral`, 
-    // which are intended to be called by the Lender.
+    /// Allow the contract creator (Borrower) to withdraw collateral 
+    /// if no interest has been received in loan offer.
+    /// NOTE: this is different to `returnCollateral` and `siezeCollateral`, 
+    /// which are intended to be called by the Lender.
+    /// @dev Withdraw collateral from loan and return to Borrower
     function withdrawCollateral() public {
         require(msg.sender == borrower);
         // Do not allow withdrawl of collateral after loan has "started"
@@ -61,8 +61,7 @@ contract Loan is priced {
         borrower.transfer(this.balance);
     }
 
-    //@dev Accept the loan as a lender 
-    //     (note: requires that collateral has already been put up)
+    /// @dev Accept the loan as a lender (note: requires that collateral has already been put up)
     function registerAsLender() public {
         // Require that collateral has already been put up
         require(collateralProvided);
@@ -70,8 +69,8 @@ contract Loan is priced {
         lender = msg.sender;
     }
 
-    //@dev Let the lender sieze the collateral in the event of a loan default
-    //@param token The address of the token to liquify the collateral in
+    /// @dev Let the lender sieze the collateral in the event of a loan default
+    /// @param token The address of the token to liquify the collateral in
     function siezeCollateral(ERC20 token) public {
         require(msg.sender == lender);
 
@@ -88,9 +87,9 @@ contract Loan is priced {
         Default();
     }
 
-    //@dev Allow the lender to mark the loan as fulfilled and return the 
-    //     collateral to the borrower
+    /// @dev Mark loan as fulfilled and return collateral to the borrower
     function returnCollateral() public {
+        // Can only be initiated by lender
         require(msg.sender == lender);
 
         borrower.transfer(this.balance);
@@ -98,6 +97,7 @@ contract Loan is priced {
         LoanFulfilled(this.balance);
     }
 
+    /// For testing!
     function meaningOfLife() public pure returns (uint) {
         return 42;
     }
