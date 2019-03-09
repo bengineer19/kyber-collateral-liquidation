@@ -5,6 +5,12 @@ A web interface for visualising what's going on is provided [here](https://githu
 
 Note: this a proof-of-concept demo.
 
+## Note
+The main thing in this repo that's important is the `Loan.sol` file. Most other things are development gubbins.
+The meat of the demo is in the [front-end repo](https://github.com/bengineer19/kyberloan-frontend).
+
+The contract isn't designed to be deployed from truffle, but by the demo interface through web3js when required.
+
 ## Running Ganache
 To make the Kyber smart contracts available locally, we use the setup described [here](https://github.com/KyberNetwork/workshop).
 
@@ -20,6 +26,3 @@ Simply run
 truffle migrate --network development
 ```
 
-## Note
-The main thing in this repo that's important is the `Loan.sol` file. Most other things are development gubbins.
-The meat of the demo is in the [front-end repo](https://github.com/bengineer19/kyberloan-frontend).
